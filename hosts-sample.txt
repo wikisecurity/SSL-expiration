@@ -1,0 +1,21 @@
+# 목록
+; This is comment
+wiki.wikisecurity.net
+wikisecurity.net
+rura.wikisecurity.net
+ms.wikisecurity.net
+rav.wikisecurity.net
+shodanapi.wikisecurity.net
+vul.wikisecurity.net
+vul-api.wikisecurity.net
+ws.wikisecurity.net
+threat.wikisecurity.net
+bugbounty.wikisecurity.net
+mp4cu.wikisecurity.net
+bugbp.wikisecurity.net
+marshal.wikisecurity.net
+api-bugbp.wikisecurity.net
+api-marshal.wikisecurity.net
+api-file.wikisecurity.net
+api-mp4cu.wikisecurity.net
+opjt.wikisecurity.net
