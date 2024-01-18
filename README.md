@@ -1,3 +1,6 @@
+참조: https://github.com/ak545/ssl-host-expiration-checker
+    
+    
     명령어
     ex) python ssl-check.py -nb -c -e j.nam12@wikisecurity.net -f hosts-sample.txt
 
