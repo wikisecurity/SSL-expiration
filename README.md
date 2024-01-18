@@ -82,6 +82,83 @@ hosts-sample.txt에 SSL 인증스캔할 주소
 
 
 
+-------
+
+# 수정해야할 부분
+
+SMTP 연동문제로  결과값 나오나 알람메일이 보내지지 않음
+
+![image](https://github.com/wikisecurity/SSL-expiration/assets/122947746/399a9941-83dd-46df-8f25-da05ffd4b27f)
 
 
-  
+
+코드
+
+    # SMTP options
+    SMTP_SERVER: str = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    
+    # SMTP_SERVER: str = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    # SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))  # For starttls
+    
+    # SMTP_SERVER: str = os.getenv("SMTP_SERVER", "smtp.mail.ru")
+    # SMTP_PORT: int = int(os.getenv("SMTP_PORT", "25"))  # Default
+    
+    # SMTP_SERVER: str = os.getenv("SMTP_SERVER", "smtp.yandex.ru")
+    # SMTP_PORT: int = int(os.getenv("SMTP_PORT", "465"))  # For SSL
+    
+    SMTP_SENDER: str = os.getenv("SMTP_SENDER", "j.nam12@wikisecurity.net")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "zgrw hjki jbuu zyis")
+    SMTP_CHECK_SSL_HOSTNAME: bool = False if str(os.getenv("SMTP_CHECK_SSL_HOSTNAME")) == "0" else True
+
+
+    Gmail에서도 설정이 필요해보임
+
+
+# 잔여일 알람 설정
+
+
+line 793부터 831까지
+
+코드
+
+     dt_now = datetime.now()
+            sdt = data.get('notAfter')
+            dt = datetime.strptime(sdt, '%b %d %H:%M:%S %Y GMT')
+            dt_delta = dt - dt_now
+    
+            is_expiried = dt_delta.days <= CLI.days_to_warn
+            is_expiried_warn = dt_delta.days <= CLI.days_to_warn + 7
+            if is_expiried:
+                row_color = f'{FRC}'
+                row_color2 = f'{FLR}'
+            elif is_expiried_warn:
+                row_color = f'{FY}'
+                row_color2 = f'{FLY}'
+            else:
+                row_color = f'{FC}'
+                row_color2 = f'{FLC}'
+    
+            if is_expiried:
+                expires_hosts.append(f'{current_host.lower()};{dt_delta.days}')
+    
+            s_host = current_host.lower().rjust(max_len_hostname + 8)
+            s_days = '    ' + str(dt_delta.days)
+            s_days = s_days.ljust(10)
+            print(
+                f'{row_color}{s_host}',
+                f'{row_color2}{s_days}',
+                f'{FLBC}{country_name}, {organization_name}, {common_name}'
+            )
+    
+        if len(expires_hosts) > 0:
+            if CLI.use_telegram:
+                res = send_expires_telegram(expires_hosts)
+                if res is not None:
+                    if res.status_code != 200:
+                        print(f'{FLR}{res.text}')
+    
+            if CLI.email_to:
+                send_expires_email(expires_hosts)
+        print(f'{SR}')
+      
